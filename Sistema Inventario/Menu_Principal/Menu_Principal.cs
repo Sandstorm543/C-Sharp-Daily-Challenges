@@ -1,10 +1,5 @@
-class Menu_Principal
+class Menu_Principal : Captura_Menu
 {
-    // Atributo de la class Menu_Primcipal, lac cual usa el modificador Private, por que solo sera usada en el menu, 
-    // y no hace falta que nadie mas tenga acceso
-
-    private int opcion;
-
     // Aca llamo la class Inventario, la llamo como atributo, para no tener que estar llamando a cada rato, 
     // ya que quiero usar una unica instancia,
     // para todas las opciones del menu, por que quiero trabajar con una unica list
@@ -21,18 +16,9 @@ class Menu_Principal
         {
             Console.Clear();
 
-            Console.WriteLine("1. Registrar Producto");
+            // Muestra las opciones del menú y captura la opción ingresada por el usuario.
 
-            Console.WriteLine("2. Mostrar Inventario");
-
-            Console.WriteLine("3. Buscar producto");
-
-            Console.WriteLine("4. Salir");
-
-            while (!int.TryParse(Console.ReadLine(), out opcion))
-            {
-                Console.Error.WriteLine("Entrada no válida. Escribe un caracter numerico");
-            }
+            Mostrar_Datos_Menu();
 
             switch(opcion)
             {
@@ -41,13 +27,19 @@ class Menu_Principal
                 //Aca llamo la class Producto con una instancia, para poder traer la captura de datos.
 
                 Producto producto = new Producto();
+                
                 producto.Registrar_Producto();
 
                 // Aca hago uso de la list que esta en inventario, la cual llame la class en los atributos, por lo que explique arriba
 
-                inventario.AgregarProducto(producto);
-                Console.WriteLine("Producto registrado.. Presione una tecla para continuar.");
-                Console.ReadKey();
+                if (inventario.AgregarProducto(producto))
+                {
+                    Console.WriteLine("Producto registrado.");
+                }
+                    else
+                {
+                    Console.WriteLine("Ya existe un producto con ese ID.");
+                }
 
                 break;
 
@@ -56,11 +48,17 @@ class Menu_Principal
                 // De igual forma aqui llamo el metodo Mostrar_inventario con la misma instancia que en el caso 1, 
                 // para que compartan list y los datos registrados en la captura de datos sean lo mismo..
 
-                inventario.Mostrar_inventario();
+                inventario.Mostrar_Inventario();
 
                 break;
 
                 case 3:
+
+                 // De igual forma aqui llamo el metodo Mostrar_inventario con la misma instancia que en el case 1 y case 2, 
+                 // Para que compartan la misma intancia de la list y los datos capturdos sean lo mismos.
+
+                inventario.Buscar_Producto();
+
                 break;
 
                 case 4:
@@ -68,10 +66,13 @@ class Menu_Principal
                 //Enviroment.Exit(0) para salir del programa al selecionar el 4.
 
                 Environment.Exit(0);
+
                 break;
 
                 default:
+                
                 Console.WriteLine("Por favor selecionar una de los 4 opciones disponible..");
+
                 break;
             }
         }
